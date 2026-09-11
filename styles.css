@@ -41,7 +41,11 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 84px;
+  /* El header es sticky y cambia de alto según el ancho (en mobile la marca y
+     el selector van en dos filas), así que el salto a un ancla se corrige con
+     la altura real, que mide `ajustarAnclas()` en app.js. El valor de reserva
+     cubre el caso sin JS. */
+  scroll-padding-top: calc(var(--alto-cabecera, 72px) + 12px);
 }
 
 body {
@@ -359,6 +363,61 @@ img {
 .menu a[aria-current="page"] {
   color: var(--rosa);
   border-bottom-color: var(--rosa);
+}
+
+/* Menú mobile. Los cinco links piden 372px y a 375px de viewport hay 343, así
+   que abajo de 768px se cambian por un <select>: abre el picker nativo del
+   sistema, que en el teléfono es más cómodo que una lista que se corta. */
+.menu-movil {
+  display: none;
+  position: relative;
+}
+
+.menu-movil select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  width: 100%;
+  border: var(--borde);
+  border-radius: var(--pildora);
+  background: var(--papel);
+  color: var(--tinta);
+  padding: 11px 42px 11px 20px;
+  /* 16px o más: abajo de eso iOS hace zoom al enfocar el campo. */
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: var(--sombra-chica);
+}
+
+/* La flecha, con el truco del borde: el sitio no usa ningún SVG. */
+.menu-movil::after {
+  content: "";
+  position: absolute;
+  right: 19px;
+  top: 50%;
+  margin-top: -2px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--tinta);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .menu {
+    display: none;
+  }
+
+  .menu-movil {
+    display: block;
+  }
+}
+
+/* Abajo de 500px la marca sola ya ocupa la fila, así que el selector baja a la
+   suya y va a lo ancho: queda deliberado en vez de apretado. */
+@media (max-width: 499px) {
+  .menu-movil {
+    flex: 1 1 100%;
+  }
 }
 
 /* ------------------------------------------------------------------ 4. Hero */

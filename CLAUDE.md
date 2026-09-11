@@ -142,8 +142,8 @@ node tools/generar-datos.mjs && node tools/descargar-imagenes.mjs
 
 ## Diferencias contra el prototipo
 
-El diseño se respetó salvo en tres puntos, todos por la regla de las imágenes o
-por el contenido real:
+El diseño se respetó salvo en cuatro puntos, todos por la regla de las imágenes,
+por el contenido real o por cómo entra en una pantalla de teléfono:
 
 1. **Los íconos SVG se fueron.** Donde el prototipo ponía un rayo, una estrella
    o un disco sobre un color plano, ahora va la foto de la banda.
@@ -154,6 +154,12 @@ por el contenido real:
    video 16:9 dejaba dos franjas negras enormes, así que va una tapa propia con
    la foto a sangre y el botón de play, que se saca al arrancar. El video
    después se ve con su relación de aspecto real, sin recortar.
+4. **En mobile la navegación es un `<select>`.** Los cinco links piden 372px y
+   a 375px de viewport hay 343, así que se cortaban. Abajo de 768px se cambian
+   por un selector que abre el picker nativo del sistema; de 768px para arriba
+   los links siguen igual. Como el header pasa a medir dos filas, el alto real
+   se publica en `--alto-cabecera` (`ajustarAnclas()`) y `scroll-padding-top`
+   lo usa, para que el salto a un ancla no deje la sección tapada.
 
 ## Lo que falta: WordPress
 

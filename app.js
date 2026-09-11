@@ -734,8 +734,38 @@ function reubicarAncla() {
   if (destino) requestAnimationFrame(() => destino.scrollIntoView({ behavior: "auto" }));
 }
 
+/**
+ * El <select> del header mobile navega al elegir. En la home los valores son
+ * anclas de la misma página (y el salto lo suaviza `scroll-behavior`); en las
+ * internas apuntan a index.html.
+ */
+function initMenuMovil() {
+  const select = document.getElementById("ir-a");
+  select?.addEventListener("change", () => {
+    if (select.value) location.href = select.value;
+  });
+}
+
+/**
+ * Publica el alto real del header sticky en `--alto-cabecera` para que
+ * `scroll-padding-top` deje la sección debajo y no tapada. Se observa el
+ * elemento porque el alto cambia solo al pasar de una fila a dos.
+ */
+function ajustarAnclas() {
+  const cabecera = document.querySelector(".cabecera");
+  if (!cabecera) return;
+  const medir = () =>
+    document.documentElement.style.setProperty("--alto-cabecera", `${cabecera.offsetHeight}px`);
+  // Sincrónico primero: `reubicarAncla()` corre a continuación y el observer
+  // recién avisaría en el frame siguiente, con el salto ya hecho de menos.
+  medir();
+  new ResizeObserver(medir).observe(cabecera);
+}
+
 const arrancar = () => {
   PANTALLAS[document.body.dataset.pagina]?.();
+  initMenuMovil();
+  ajustarAnclas();
   reubicarAncla();
 };
 
