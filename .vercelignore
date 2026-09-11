@@ -1,0 +1,22 @@
+# Fuentes y handoff: no son parte del sitio servido.
+# Las 5 páginas sólo usan favicon.svg, styles.css, app.js y assets/.
+
+# Export de WordPress (fuente de datos.js, con mails internos adentro)
+uploads/
+
+# Prototipo y diseño originales
+design_handoff_playconcert/
+PlayConcert.dc.html
+catalogo.js
+support.js
+
+# Export del diseñador (el sitio usa las copias de assets/marca/)
+1x/
+
+# Scripts de migración one-shot
+tools/
+
+# Documentación y config de herramientas
+CLAUDE.md
+.impeccable/
+.claude/
