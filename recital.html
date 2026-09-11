@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Recital · PlayConcert</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-pagina="recital">
+
+<header class="cabecera">
+  <a class="marca" href="index.html">
+    <img class="marca__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+    <img class="marca__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+  </a>
+  <nav class="menu" aria-label="Principal">
+    <a href="index.html#inicio">Inicio</a>
+    <a href="index.html#leyendas">Leyendas</a>
+    <a href="index.html#historicos">Históricos</a>
+    <a href="index.html#cine">Cine</a>
+    <a href="index.html#catalogo">Catálogo</a>
+  </nav>
+</header>
+
+<main>
+  <div class="interna">
+    <a class="boton boton--chico volver" href="index.html">Volver al inicio</a>
+
+    <!-- El player del recital: el video, o la foto de la banda con el aviso
+         encima cuando el archivo todavía no está subido al CMS. -->
+    <div id="player"></div>
+
+    <!-- Título, bio de la banda y la ficha con los datos del post original. -->
+    <div class="datos" id="ficha"></div>
+
+    <section style="margin-top:var(--aire)" id="resenas-seccion">
+      <div class="seccion-cabecera">
+        <h2 class="titulo-l titulo-seccion">La prensa dijo</h2>
+        <p class="seccion-bajada">Reseñas del show</p>
+      </div>
+      <div class="resenas" id="resenas"></div>
+    </section>
+
+    <section style="margin-top:var(--aire)" id="relacionados-seccion">
+      <div class="seccion-cabecera">
+        <h2 class="titulo-l titulo-seccion">Seguí viendo</h2>
+        <p class="seccion-bajada">Recomendados para este show</p>
+      </div>
+      <div class="grilla grilla--relacionados" id="relacionados"></div>
+    </section>
+
+    <div class="espacio"></div>
+  </div>
+</main>
+
+<footer class="pie">
+  <img class="pie__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+  <img class="pie__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

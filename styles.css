@@ -1,0 +1,1239 @@
+/* =============================================================================
+   PLAYCONCERT — hoja de estilos única.
+   Neo-brutalismo: borde negro de 2px, sombra dura sin blur, tipografía Rubik
+   apretada en mayúsculas para los títulos y paleta plana de cinco colores.
+
+   Regla de oro del proyecto: donde hay un recital, una banda o una película,
+   hay una FOTO. Los colores planos son sólo el fondo mientras la imagen carga
+   (ver .media) y el borde de las fichas. Nunca un ícono en lugar de la foto.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- 1. Tokens */
+
+:root {
+  --tinta: #000;
+  --papel: #fff;
+  --gris: #4a4a4a;
+  --gris-suave: #f4f4f4;
+
+  --rosa: #ff7ba9;
+  --amarillo: #ffd84d;
+  --celeste: #8fcfe8;
+  --verde: #77d6a4;
+  --violeta: #b79ced;
+
+  --borde: 2px solid var(--tinta);
+  --sombra: 6px 6px 0 var(--tinta);
+  --sombra-chica: 4px 4px 0 var(--tinta);
+  --sombra-alta: 9px 9px 0 var(--tinta);
+
+  --radio: 26px;
+  --radio-chico: 22px;
+  --pildora: 999px;
+
+  --margen: clamp(16px, 4vw, 56px);
+  --aire: clamp(56px, 7vw, 104px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: Rubik, system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Foco visible y consistente: el teclado tiene que poder recorrer todo. */
+:focus-visible {
+  outline: 3px solid var(--rosa);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------- 2. Piezas compartidas */
+
+.titulo-xl,
+.titulo-l,
+.titulo-m,
+.datos__titulo {
+  margin: 0;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  text-wrap: balance;
+  /* Palabras largas ("latinoamericanas") no pueden empujar el ancho de la
+     columna: en mobile el título parte antes de desbordar la sección. */
+  min-width: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.titulo-xl {
+  font-size: clamp(34px, 5.6vw, 84px);
+}
+.titulo-l {
+  font-size: clamp(34px, 7vw, 104px);
+}
+/* Igual que .titulo-l pero un escalón abajo: en las páginas internas el H1 es
+   el nombre del artista, y las secciones no tienen que pelearle el tamaño. */
+.titulo-seccion {
+  font-size: clamp(28px, 3.6vw, 56px);
+}
+.titulo-m {
+  font-size: clamp(26px, 3vw, 44px);
+  text-transform: none;
+  line-height: 1;
+}
+
+.pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: var(--borde);
+  border-radius: var(--pildora);
+  background: var(--papel);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pildora--rosa {
+  background: var(--rosa);
+}
+.pildora--amarilla {
+  background: var(--amarillo);
+}
+.pildora--celeste {
+  background: var(--celeste);
+}
+.pildora--verde {
+  background: var(--verde);
+}
+.pildora--violeta {
+  background: var(--violeta);
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: var(--borde);
+  border-radius: var(--pildora);
+  background: var(--papel);
+  padding: 13px 26px;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: var(--sombra-chica);
+  transition: background 0.14s, transform 0.14s, box-shadow 0.14s;
+}
+
+.boton:hover {
+  background: var(--amarillo);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--tinta);
+}
+
+.boton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+.boton--fuerte {
+  background: var(--tinta);
+  color: var(--papel);
+  box-shadow: 5px 5px 0 var(--papel);
+}
+
+.boton--fuerte:hover {
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: 5px 5px 0 var(--tinta);
+}
+
+.boton--chico {
+  padding: 9px 20px;
+  font-size: 15px;
+}
+
+.seccion {
+  padding: var(--aire) var(--margen) 0;
+}
+
+.seccion-cabecera {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(22px, 3vw, 40px);
+}
+
+.seccion-bajada {
+  margin: 0 0 8px;
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 500;
+}
+
+/* La caja de imagen. El color plano es sólo el fondo mientras carga la foto;
+   `object-position` alto porque casi todas las fotos del catálogo son retratos
+   cuadrados y la cara queda arriba del centro geométrico. */
+.media {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--gris-suave);
+}
+
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+.media__marca {
+  position: absolute;
+  z-index: 1;
+}
+
+.media__marca--abajo-der {
+  right: 10px;
+  bottom: 10px;
+}
+.media__marca--arriba-izq {
+  left: 10px;
+  top: 10px;
+}
+
+/* Velo negro de abajo hacia arriba, para que el texto sobre foto se lea. */
+.media--velo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.15) 45%, transparent 70%);
+}
+
+/* Estado vacío y 404: el isotipo remata la caja para que no quede pelada. */
+.vacio {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  border: var(--borde);
+  border-radius: var(--radio);
+  background: var(--gris-suave);
+  padding: clamp(24px, 4vw, 48px);
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.vacio__iso {
+  width: min(100%, 220px);
+  height: auto;
+  opacity: 0.85;
+}
+
+.vacio p {
+  margin: 0;
+}
+
+.oculto {
+  display: none !important;
+}
+
+/* Sólo para lectores de pantalla. */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------ 3. Encabezado */
+
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--papel);
+  border-bottom: var(--borde);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px var(--margen);
+  flex-wrap: wrap;
+}
+
+/* Lockup de marca: isotipo (estadio + onda) y wordmark, los dos de assets/marca.
+   El wordmark viene en blanco puro con alfa, así que sobre fondo claro se
+   invierte — `invert(1)` lo pasa a negro puro sin tocar el recorte. Sobre el
+   pie negro va como vino. */
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(8px, 1vw, 14px);
+  line-height: 0;
+}
+
+.marca__iso {
+  height: clamp(24px, 3vw, 42px);
+  width: auto;
+}
+
+.marca__tipo {
+  height: clamp(13px, 1.7vw, 23px);
+  width: auto;
+  filter: invert(1);
+}
+
+.marca:hover .marca__iso {
+  transform: scale(1.06);
+}
+
+.marca__iso,
+.marca__tipo {
+  transition: transform 0.16s;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
+  font-size: 17px;
+  font-weight: 500;
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+.menu a {
+  white-space: nowrap;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.menu a:hover,
+.menu a[aria-current="page"] {
+  color: var(--rosa);
+  border-bottom-color: var(--rosa);
+}
+
+/* ------------------------------------------------------------------ 4. Hero */
+
+.hero {
+  padding: clamp(20px, 3vw, 40px) var(--margen) 0;
+}
+
+.hero__caja {
+  border: var(--borde);
+  border-radius: 28px;
+  box-shadow: var(--sombra);
+  background: var(--amarillo);
+  padding: clamp(24px, 3.4vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(28px, 3vw, 56px);
+  align-items: center;
+}
+
+.hero__volanta {
+  margin-bottom: 20px;
+}
+
+.hero__bajada {
+  margin: 16px 0 28px;
+  font-size: clamp(17px, 1.4vw, 21px);
+  font-weight: 500;
+  line-height: 1.4;
+  max-width: 46ch;
+}
+
+.hero__foto {
+  display: block;
+  position: relative;
+  border: var(--borde);
+  border-radius: var(--radio-chico);
+  box-shadow: var(--sombra);
+  aspect-ratio: 16 / 11;
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+
+.hero__foto:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--sombra-alta);
+}
+
+.hero__pie {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  z-index: 1;
+  color: var(--papel);
+  font-weight: 600;
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.25;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.6);
+}
+
+/* Botón de play sobre la foto: círculo blanco con el triángulo dibujado en CSS,
+   así no depende de ningún ícono cargado aparte. */
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: clamp(58px, 7vw, 96px);
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+  background: var(--papel);
+  transition: background 0.16s, transform 0.16s;
+}
+
+/* El triángulo se recorta de un bloque sólido (nada de bordes transparentes):
+   escala parejo con la tipografía y no hay que tocar tres medidas a la vez. */
+.play::after {
+  content: "";
+  width: clamp(16px, 2vw, 26px);
+  aspect-ratio: 26 / 32;
+  margin-left: 18%;
+  background: var(--tinta);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+a:hover > .play,
+button:hover > .play {
+  background: var(--rosa);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.play--chico {
+  width: 44px;
+  top: auto;
+  left: 10px;
+  bottom: 10px;
+  transform: none;
+}
+
+.play--chico::after {
+  width: 13px;
+}
+
+a:hover > .play--chico,
+button:hover > .play--chico {
+  transform: scale(1.08);
+}
+
+/* -------------------------------------------------------------- 5. Marquesina */
+
+.marquesina {
+  margin-top: clamp(22px, 2.6vw, 40px);
+  border-top: var(--borde);
+  border-bottom: var(--borde);
+  background: var(--violeta);
+  overflow: hidden;
+  padding: 14px 0;
+}
+
+.marquesina__cinta {
+  display: flex;
+  width: max-content;
+  animation: correr 40s linear infinite;
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.marquesina__cinta span {
+  padding-right: 28px;
+}
+
+@keyframes correr {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ------------------------------------------------- 6. Banner ¡Vino a Argentina! */
+
+.alerta {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  align-items: stretch;
+  gap: 0;
+  border: var(--borde);
+  border-radius: var(--radio-chico);
+  box-shadow: var(--sombra);
+  background: var(--celeste);
+  overflow: hidden;
+}
+
+.alerta__foto {
+  border-right: var(--borde);
+  min-height: 100%;
+}
+
+.alerta__cuerpo {
+  padding: clamp(18px, 2.4vw, 30px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.alerta__titulo {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  flex: 1 1 100%;
+}
+
+.alerta__copete {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.45;
+  flex: 1 1 320px;
+  min-width: 220px;
+}
+
+@media (max-width: 620px) {
+  .alerta {
+    grid-template-columns: 1fr;
+  }
+  .alerta__foto {
+    border-right: 0;
+    border-bottom: var(--borde);
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+}
+
+/* ---------------------------------------------------------- 7. Grilla y fichas */
+
+.grilla {
+  display: grid;
+  gap: clamp(18px, 2.2vw, 28px);
+}
+
+.grilla--bandas {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.grilla--catalogo {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+.grilla--relacionados {
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+/* Ficha genérica: foto arriba, texto abajo, borde y sombra dura. */
+.ficha {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  overflow: hidden;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  background: var(--papel);
+  transition: transform 0.16s, box-shadow 0.16s, background 0.16s;
+}
+
+.ficha:hover {
+  background: var(--amarillo);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sombra-alta);
+}
+
+.ficha__media {
+  aspect-ratio: 16 / 11;
+  border-bottom: var(--borde);
+}
+
+.ficha__cuerpo {
+  padding: 16px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.ficha__titulo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.ficha__sub {
+  font-size: 15px;
+  color: var(--gris);
+  line-height: 1.35;
+}
+
+.ficha:hover .ficha__sub {
+  color: #2a2a2a;
+}
+
+.ficha__meta {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.ficha__etiquetas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+/* Ficha de banda: foto más grande y nombre en grande. */
+.ficha--banda .ficha__media {
+  aspect-ratio: 4 / 3;
+}
+
+.ficha--banda .ficha__titulo {
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1;
+}
+
+/* --------------------------------------------------- 8. Artista destacado */
+
+.destacado {
+  border: var(--borde);
+  border-radius: 28px;
+  box-shadow: var(--sombra);
+  background: var(--violeta);
+  padding: clamp(24px, 3vw, 48px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+}
+
+.destacado__foto {
+  display: block;
+  width: clamp(170px, 24vw, 280px);
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+  justify-self: center;
+  box-shadow: var(--sombra);
+  transition: transform 0.16s;
+}
+
+.destacado__foto:hover {
+  transform: scale(1.03) rotate(-2deg);
+}
+
+.destacado__foto .media,
+.destacado__foto img {
+  border-radius: 50%;
+}
+
+.destacado__bio {
+  margin: 0 0 20px;
+  font-size: 17px;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+.destacado__pie {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* -------------------------------------------------------- 9. Cine & música */
+
+.cine {
+  border: var(--borde);
+  border-radius: 28px;
+  box-shadow: var(--sombra);
+  background: var(--verde);
+  padding: clamp(22px, 2.6vw, 40px);
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: clamp(24px, 3vw, 44px);
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .cine {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cine__afiche {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border: var(--borde);
+  border-radius: 20px;
+  box-shadow: var(--sombra);
+  justify-self: center;
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+
+.cine__afiche:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--sombra-alta);
+}
+
+.cine__titulo {
+  margin: 16px 0 14px;
+  font-size: clamp(34px, 5vw, 72px);
+}
+
+.cine__sinopsis {
+  margin: 0 0 20px;
+  font-size: 17px;
+  line-height: 1.55;
+  max-width: 58ch;
+}
+
+.cine__datos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.estrellas {
+  font-size: 22px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+/* -------------------------------------------------- 10. Recitales históricos */
+
+.lista {
+  border-top: var(--borde);
+}
+
+.lista__fila {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 26px);
+  width: 100%;
+  text-align: left;
+  background: var(--papel);
+  border-bottom: 1px solid var(--tinta);
+  padding: 16px 8px;
+  flex-wrap: wrap;
+  /* El corrimiento del hover va por transform y no por padding: mover padding
+     en una fila a todo el ancho relayoutea la lista entera en cada pasada. */
+  transition: background 0.14s, transform 0.14s;
+}
+
+.lista__fila:hover {
+  background: var(--amarillo);
+  transform: translateX(8px);
+}
+
+.lista__foto {
+  flex: none;
+  width: 86px;
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+}
+
+.lista__foto .media,
+.lista__foto img {
+  border-radius: 50%;
+}
+
+.lista__texto {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.lista__titulo {
+  display: block;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.lista__sub {
+  display: block;
+  font-size: 15px;
+  color: var(--gris);
+  margin-top: 5px;
+}
+
+/* ------------------------------------------------------- 11. Rock en español */
+
+.hito {
+  text-align: left;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  background: var(--papel);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.16s, box-shadow 0.16s;
+}
+
+.hito:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--sombra-alta);
+}
+
+.hito__media {
+  aspect-ratio: 16 / 9;
+  border-bottom: var(--borde);
+}
+
+.hito__anio {
+  position: absolute;
+  left: 14px;
+  bottom: 6px;
+  z-index: 1;
+  font-size: clamp(46px, 6vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  color: var(--papel);
+  -webkit-text-stroke: 2px var(--tinta);
+}
+
+.hito__cuerpo {
+  padding: clamp(18px, 2vw, 26px);
+}
+
+.hito__titulo {
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.hito__desc {
+  margin: 8px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+/* ----------------------------------------------------------- 12. Filtros */
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(22px, 3vw, 32px);
+}
+
+.filtro {
+  cursor: pointer;
+  border: var(--borde);
+  border-radius: var(--pildora);
+  padding: 9px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 var(--tinta);
+  background: var(--papel);
+  transition: background 0.14s, transform 0.14s;
+}
+
+.filtro:hover {
+  background: var(--amarillo);
+}
+
+.filtro[aria-pressed="true"] {
+  background: var(--celeste);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--tinta);
+}
+
+.centrar {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(28px, 3vw, 40px);
+}
+
+/* ------------------------------------------------- 13. Player y ficha interna */
+
+.interna {
+  padding: clamp(20px, 3vw, 40px) var(--margen) 0;
+}
+
+.volver {
+  margin-bottom: 24px;
+}
+
+.reproductor {
+  position: relative;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+  background: var(--tinta);
+}
+
+.reproductor video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--tinta);
+}
+
+/* Tapa con la foto de la banda; se saca al apretar play y queda el video solo,
+   con su relación de aspecto real (nada de recortar el material original). */
+.tapa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: var(--tinta);
+}
+
+.tapa::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 0.45), transparent 55%);
+}
+
+/* Cuando el recital todavía no tiene archivo, se muestra la foto de la banda
+   con el aviso encima: sigue habiendo imagen, nunca un cuadro vacío. */
+.pendiente {
+  position: relative;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.pendiente__aviso {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 0.55);
+  color: var(--papel);
+}
+
+.pendiente__aviso strong {
+  display: block;
+  font-size: clamp(22px, 2.4vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.pendiente__aviso p {
+  margin: 10px auto 0;
+  font-size: 17px;
+  line-height: 1.45;
+  max-width: 44ch;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: minmax(280px, 2fr) minmax(260px, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  margin-top: 36px;
+}
+
+@media (max-width: 860px) {
+  .datos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.datos__etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.datos__titulo {
+  margin: 0 0 10px;
+  font-size: clamp(32px, 5vw, 72px);
+}
+
+.datos__show {
+  margin: 0 0 22px;
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 500;
+  line-height: 1.15;
+  max-width: 26ch;
+}
+
+.datos__bio {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+  max-width: 62ch;
+  color: #1a1a1a;
+}
+
+.panel {
+  border: var(--borde);
+  border-radius: 24px;
+  box-shadow: var(--sombra);
+  padding: 22px;
+  background: var(--papel);
+  align-self: start;
+}
+
+.panel h2 {
+  margin: 0 0 14px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.panel__fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-top: 1px solid var(--tinta);
+  font-size: 15px;
+}
+
+.panel__fila dt {
+  font-weight: 600;
+  margin: 0;
+}
+
+.panel__fila dd {
+  margin: 0;
+  text-align: right;
+}
+
+.panel__banda {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: var(--borde);
+}
+
+.panel__banda .avatar {
+  flex: none;
+  width: 62px;
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: 50%;
+}
+
+.panel__banda .avatar .media,
+.panel__banda .avatar img {
+  border-radius: 50%;
+}
+
+/* Reseñas de prensa */
+.resenas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: clamp(18px, 2vw, 26px);
+}
+
+.resena {
+  border: var(--borde);
+  border-radius: var(--radio-chico);
+  box-shadow: var(--sombra-chica);
+  background: var(--papel);
+  padding: 22px;
+}
+
+.resena blockquote {
+  margin: 0 0 14px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.resena figcaption {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --------------------------------------------------------- 14. Ficha de banda */
+
+.banda-cabecera {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: clamp(24px, 3vw, 48px);
+  align-items: center;
+  border: var(--borde);
+  border-radius: 28px;
+  box-shadow: var(--sombra);
+  background: var(--amarillo);
+  padding: clamp(22px, 3vw, 48px);
+}
+
+@media (max-width: 760px) {
+  .banda-cabecera {
+    grid-template-columns: 1fr;
+  }
+}
+
+.banda-cabecera__foto {
+  width: 100%;
+  aspect-ratio: 1;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.banda-cabecera__nombre {
+  margin: 12px 0 16px;
+}
+
+.miembros {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.miembros li {
+  border: var(--borde);
+  border-radius: 14px;
+  background: var(--papel);
+  padding: 11px 14px;
+  font-size: 15px;
+}
+
+.miembros strong {
+  display: block;
+  font-weight: 600;
+}
+
+.miembros span {
+  color: var(--gris);
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------- 15. Nota */
+
+.nota {
+  max-width: 74ch;
+}
+
+/* Copete: un escalón arriba del cuerpo para que se lea como entrada.
+   Va con la especificidad de `.nota__cuerpo p` porque vive adentro de él. */
+.nota__cuerpo p.nota__copete {
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.nota__cuerpo p {
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0 0 20px;
+}
+
+.nota__foto {
+  aspect-ratio: 16 / 9;
+  border: var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+/* -------------------------------------------------------------- 16. Pie */
+
+/* Pie: sólo la marca. El isotipo va grande y centrado como remate, con el
+   wordmark debajo — sobre negro el blanco original ya contrasta, sin invertir. */
+.pie {
+  margin-top: var(--aire);
+  background: var(--tinta);
+  color: var(--papel);
+  padding: clamp(40px, 5vw, 72px) var(--margen);
+  display: grid;
+  justify-items: center;
+  gap: clamp(18px, 2.4vw, 30px);
+}
+
+.pie__iso {
+  width: min(100%, 420px);
+  height: auto;
+}
+
+.pie__tipo {
+  width: min(100%, 300px);
+  height: auto;
+}
+
+.espacio {
+  height: var(--aire);
+}

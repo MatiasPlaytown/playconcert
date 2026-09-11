@@ -1,0 +1,5 @@
+# macOS
+.DS_Store
+
+# Caché del detector de diseño (la config sí se versiona)
+.impeccable/hook.cache.json

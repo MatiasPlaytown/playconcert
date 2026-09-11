@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PlayConcert — Tus bandas favoritas a un click</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,800;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  *{ box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
+  body { font-family: Rubik, system-ui, sans-serif; color: #000; -webkit-font-smoothing: antialiased; }
+  a { color: #000; text-decoration: none; }
+  a:hover { color: #FF7BA9; }
+  button { font-family: inherit; }
+  @keyframes pc-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { *{ animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="width: 100%; max-width: 100%; overflow-x: hidden; background: #fff;">
+
+  <header style="position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 2px solid #000; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px clamp(16px, 4vw, 56px); flex-wrap: wrap;">
+    <button onClick="{{ irHome }}" style="border: 0; background: none; padding: 0; cursor: pointer; font-weight: 800; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.04em; line-height: 1;">
+      <span style="color: #000;">PLAY</span><span style="color: #FF7BA9;">CONCERT</span>
+    </button>
+    <nav style="display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); font-size: 16px; font-weight: 500; overflow-x: auto; max-width: 100%;">
+      <a href="#inicio" style="white-space: nowrap;">Inicio</a>
+      <a href="#leyendas" style="white-space: nowrap;">Leyendas</a>
+      <a href="#historicos" style="white-space: nowrap;">Históricos</a>
+      <a href="#cine" style="white-space: nowrap;">Cine</a>
+      <a href="#catalogo" style="white-space: nowrap;">Catálogo</a>
+    </nav>
+  </header>
+
+  <sc-if value="{{ esFicha }}" hint-placeholder-val="{{ false }}">
+    <main style="padding: clamp(20px, 3vw, 40px) clamp(16px, 4vw, 56px) 0;">
+      <button onClick="{{ irHome }}" style="cursor: pointer; border: 2px solid #000; background: #fff; border-radius: 999px; padding: 9px 20px; font-size: 14px; font-weight: 600; box-shadow: 4px 4px 0 #000; margin-bottom: 24px;" style-hover="background: #FFD84D;">Volver al inicio</button>
+
+      <sc-if value="{{ tieneVideo }}" hint-placeholder-val="{{ false }}">
+        <div style="border: 2px solid #000; border-radius: 26px; box-shadow: 6px 6px 0 #000; overflow: hidden; background: {{ actual.color }};">
+          <video ref="{{ videoRef }}" controls="controls" playsInline="{{ true }}" preload="metadata" style="display: block; width: 100%; aspect-ratio: 16 / 9; background: #000;"></video>
+        </div>
+      </sc-if>
+      <sc-if value="{{ videoPendiente }}" hint-placeholder-val="{{ false }}">
+        <div style="border: 2px solid #000; border-radius: 26px; box-shadow: 6px 6px 0 #000; background: {{ actual.color }}; aspect-ratio: 16 / 9; display: grid; place-items: center; text-align: center; padding: 24px;">
+          <div>
+            <div style="width: clamp(64px, 8vw, 96px); height: clamp(64px, 8vw, 96px); border: 2px solid #000; border-radius: 50%; background: #fff; display: grid; place-items: center; margin: 0 auto 18px;">
+              <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 100-20zm1 15h-2v-2h2zm0-4h-2V7h2z" fill="#000"></path></svg>
+            </div>
+            <div style="font-size: clamp(22px, 2.4vw, 34px); font-weight: 800; letter-spacing: -0.02em;">Video pendiente de carga</div>
+            <p style="margin: 10px auto 0; font-size: 16px; font-weight: 500; line-height: 1.45; max-width: 40ch;">Este recital está publicado como borrador en el CMS y todavía no tiene su archivo final subido.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(24px, 3vw, 48px); margin: 36px 0 0;">
+        <div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;">
+            <span style="border: 2px solid #000; border-radius: 999px; background: #FF7BA9; padding: 6px 16px; font-size: 13px; font-weight: 600;">{{ actual.anio }}</span>
+            <span style="border: 2px solid #000; border-radius: 999px; background: #FFD84D; padding: 6px 16px; font-size: 13px; font-weight: 600;">{{ actual.calidad }}</span>
+            <span style="border: 2px solid #000; border-radius: 999px; background: #8FCFE8; padding: 6px 16px; font-size: 13px; font-weight: 600;">{{ actual.catsTxt }}</span>
+          </div>
+          <h1 style="margin: 0 0 10px; font-size: clamp(34px, 5vw, 72px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9; text-wrap: balance;">{{ actual.artista }}</h1>
+          <p style="margin: 0 0 22px; font-size: clamp(20px, 2.2vw, 30px); font-weight: 500; line-height: 1.15; max-width: 24ch;">{{ actual.show }}</p>
+          <p style="margin: 0; font-size: 17px; font-weight: 400; line-height: 1.55; max-width: 62ch; color: #1a1a1a;">{{ actual.bio }}</p>
+        </div>
+        <div style="border: 2px solid #000; border-radius: 24px; box-shadow: 6px 6px 0 #000; padding: 24px; background: #fff; align-self: start;">
+          <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 800; letter-spacing: -0.02em;">Ficha del recital</h2>
+          <sc-for list="{{ actual.ficha }}" as="f" hint-placeholder-count="4">
+            <div style="display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid #000; font-size: 15px;">
+              <span style="font-weight: 600;">{{ f.k }}</span>
+              <span style="text-align: right; font-weight: 400;">{{ f.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <section style="margin: clamp(48px, 6vw, 88px) 0 0;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+          <h2 style="margin: 0; font-size: clamp(36px, 6vw, 84px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Seguí viendo</h2>
+          <p style="margin: 0 0 6px; font-size: 19px; font-weight: 500;">Del mismo género</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px;">
+          <sc-for list="{{ relacionados }}" as="v" hint-placeholder-count="4">
+            <button onClick="{{ v.open }}" style="cursor: pointer; text-align: left; padding: 0; overflow: hidden; border: 2px solid #000; border-radius: 22px; box-shadow: 6px 6px 0 #000; background: #fff;" style-hover="background: #FFD84D; transform: translate(-2px, -2px); box-shadow: 8px 8px 0 #000;">
+              <div style="position: relative; aspect-ratio: 16 / 10; background: {{ v.color }}; border-bottom: 2px solid #000; display: grid; place-items: center;">
+                <svg viewBox="0 0 100 100" width="52" height="52" aria-hidden="true"><path d="{{ v.d }}" fill="#000"></path></svg>
+                <span style="position: absolute; right: 10px; bottom: 10px; border: 2px solid #000; border-radius: 999px; background: #fff; padding: 3px 11px; font-size: 12px; font-weight: 600;">{{ v.anio }}</span>
+              </div>
+              <div style="padding: 14px 16px 16px;">
+                <div style="font-size: 19px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;">{{ v.artista }}</div>
+                <div style="font-size: 14px; font-weight: 400; color: #4A4A4A; margin-top: 5px; line-height: 1.3;">{{ v.show }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+      <div style="height: clamp(48px, 6vw, 88px);"></div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ esHome }}" hint-placeholder-val="{{ true }}">
+  <main id="inicio">
+
+    <section style="padding: clamp(20px, 3vw, 40px) clamp(16px, 4vw, 56px) 0;">
+      <div style="border: 2px solid #000; border-radius: 28px; box-shadow: 6px 6px 0 #000; background: #FFD84D; padding: clamp(24px, 3.4vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(28px, 3vw, 56px); align-items: center;">
+        <div>
+          <span style="display: inline-flex; align-items: center; gap: 9px; border: 2px solid #000; border-radius: 999px; background: #FF7BA9; padding: 8px 18px; font-size: 14px; font-weight: 600;">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 3l15 9-15 9z" fill="#000"></path></svg>
+            Conciertos que definieron una época
+          </span>
+          <h1 style="margin: 20px 0 16px; font-size: clamp(40px, 5.6vw, 84px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">El día que Queen hizo cantar a Wembley</h1>
+          <p style="margin: 0 0 28px; font-size: clamp(17px, 1.4vw, 21px); font-weight: 500; line-height: 1.4; max-width: 46ch;">We Will Rock You — Wembley Arena, 1986. Setenta y dos mil personas aplaudiendo al mismo tiempo.</p>
+          <button onClick="{{ abrirHero }}" style="cursor: pointer; border: 2px solid #000; background: #000; color: #fff; border-radius: 999px; padding: 16px 34px; font-size: 17px; font-weight: 600; box-shadow: 5px 5px 0 #fff;" style-hover="background: #fff; color: #000; box-shadow: 5px 5px 0 #000;">Ver el show</button>
+        </div>
+        <button onClick="{{ abrirHero }}" style="cursor: pointer; padding: 0; position: relative; border: 2px solid #000; border-radius: 22px; overflow: hidden; background: #8FCFE8; aspect-ratio: 16 / 10; display: grid; place-items: center; box-shadow: 6px 6px 0 #000;" style-hover="background: #FF7BA9;">
+          <span style="width: clamp(64px, 8vw, 104px); height: clamp(64px, 8vw, 104px); border: 2px solid #000; border-radius: 50%; background: #fff; display: grid; place-items: center;">
+            <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path d="M6 3l15 9-15 9z" fill="#000"></path></svg>
+          </span>
+          <span style="position: absolute; right: 14px; bottom: 14px; border: 2px solid #000; border-radius: 999px; background: #FFD84D; padding: 5px 14px; font-size: 13px; font-weight: 600;">1080p</span>
+        </button>
+      </div>
+    </section>
+
+    <div style="margin: clamp(22px, 2.6vw, 40px) 0 0; border-top: 2px solid #000; border-bottom: 2px solid #000; background: #B79CED; overflow: hidden; padding: 14px 0;">
+      <div style="display: flex; width: max-content; animation: pc-marquee 34s linear infinite; font-size: clamp(20px, 2.2vw, 30px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; white-space: nowrap;">
+        <span style="padding-right: 28px;">WEMBLEY 1986 * SHEA STADIUM 1965 * RIVER PLATE 1997 * BUDOKAN HALL * ABBEY ROAD 2006 * CAVERN CLUB 1999 * HACKNEY 2012 * KILBURN 1971 * FARM AID 2005 * </span>
+        <span style="padding-right: 28px;" aria-hidden="true">WEMBLEY 1986 * SHEA STADIUM 1965 * RIVER PLATE 1997 * BUDOKAN HALL * ABBEY ROAD 2006 * CAVERN CLUB 1999 * HACKNEY 2012 * KILBURN 1971 * FARM AID 2005 * </span>
+      </div>
+    </div>
+
+    <section style="padding: clamp(28px, 3.4vw, 52px) clamp(16px, 4vw, 56px) 0;">
+      <div style="border: 2px solid #000; border-radius: 22px; box-shadow: 6px 6px 0 #000; background: #8FCFE8; padding: 20px clamp(18px, 2.4vw, 32px); display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" style="flex: none;"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z" fill="#000"></path></svg>
+        <strong style="font-size: clamp(20px, 2vw, 26px); font-weight: 800; letter-spacing: -0.02em;">¡Vino a Argentina!</strong>
+        <span style="border: 2px solid #000; border-radius: 999px; background: #FFD84D; padding: 6px 16px; font-size: 14px; font-weight: 600;">2007</span>
+        <p style="margin: 0; font-size: 16px; font-weight: 400; line-height: 1.45; flex: 1 1 320px; min-width: 240px;">The Police cerró su gira de reunión en el Estadio River Plate y quedó filmada en <em>Certifiable: Live in Buenos Aires</em>, con <em>Synchronicity</em> y <em>Reggatta de Blanc</em> completos.</p>
+        <button onClick="{{ abrirAviso }}" style="cursor: pointer; border: 2px solid #000; background: #fff; border-radius: 999px; padding: 11px 22px; font-size: 15px; font-weight: 600; box-shadow: 4px 4px 0 #000;" style-hover="background: #FF7BA9;">Ver el recital</button>
+      </div>
+    </section>
+
+    <section id="leyendas" style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px);">
+        <h2 style="margin: 0; font-size: clamp(48px, 7.4vw, 110px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Leyendas del rock</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">Los más reconocidos, primero</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: clamp(20px, 2.2vw, 30px);">
+        <sc-for list="{{ leyendas }}" as="l" hint-placeholder-count="6">
+          <button onClick="{{ l.open }}" style="cursor: pointer; text-align: left; padding: 0; overflow: hidden; border: 2px solid #000; border-radius: 26px; box-shadow: 6px 6px 0 #000; background: #fff; display: flex; flex-direction: column;" style-hover="background: #FFD84D; transform: translate(-2px, -2px); box-shadow: 9px 9px 0 #000;">
+            <div style="aspect-ratio: 16 / 9; background: {{ l.color }}; border-bottom: 2px solid #000; display: grid; place-items: center;">
+              <svg viewBox="0 0 100 100" width="78" height="78" aria-hidden="true"><path d="{{ l.d }}" fill="#000"></path></svg>
+            </div>
+            <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 10px; flex: 1;">
+              <div style="font-size: clamp(24px, 2vw, 32px); font-weight: 800; letter-spacing: -0.02em; line-height: 1;">{{ l.nombre }}</div>
+              <div style="font-size: 15px; font-weight: 400; color: #4A4A4A;">{{ l.genero }}</div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 14px;">
+                <span style="border: 2px solid #000; border-radius: 999px; padding: 6px 15px; font-size: 13px; font-weight: 600; background: {{ l.estadoColor }};">{{ l.estado }}</span>
+                <span style="border: 2px solid #000; border-radius: 999px; padding: 6px 15px; font-size: 13px; font-weight: 600; background: #fff;">{{ l.shows }}</span>
+              </div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.4vw, 32px);">
+        <h2 style="margin: 0; font-size: clamp(44px, 6.4vw, 96px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Artista destacado</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">La banda que cerró una era</p>
+      </div>
+      <div style="border: 2px solid #000; border-radius: 28px; box-shadow: 6px 6px 0 #000; background: #B79CED; padding: clamp(24px, 3vw, 48px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 3vw, 48px); align-items: center;">
+        <div style="width: clamp(160px, 22vw, 260px); aspect-ratio: 1; border: 2px solid #000; border-radius: 50%; background: #FFD84D; display: grid; place-items: center; justify-self: center;">
+          <svg viewBox="0 0 100 100" width="96" height="96" aria-hidden="true"><path d="M50 8a42 42 0 100 84 42 42 0 100-84zm0 32a10 10 0 110 20 10 10 0 110-20z" fill="#000"></path></svg>
+        </div>
+        <div style="min-width: 0;">
+          <h3 style="margin: 0 0 14px; font-size: clamp(26px, 3vw, 44px); font-weight: 800; letter-spacing: -0.03em; line-height: 1;">Soda Stereo — El Último Concierto</h3>
+          <p style="margin: 0 0 20px; font-size: 17px; font-weight: 400; line-height: 1.55; max-width: 60ch;">Formada en 1982, es la banda de rock en español más influyente de América Latina. El registro del cierre de la gira <em>Sueño Stereo</em> incluye <em>De música ligera</em>, <em>Persiana americana</em> y <em>En la ciudad de la furia</em>.</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <span style="display: inline-flex; align-items: center; gap: 8px; border: 2px solid #000; border-radius: 999px; background: #fff; padding: 9px 18px; font-size: 14px; font-weight: 600;">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z" fill="#000"></path></svg>
+              Estadio River Plate · Buenos Aires 1997
+            </span>
+            <button onClick="{{ abrirDestacado }}" style="cursor: pointer; border: 2px solid #000; background: #000; color: #fff; border-radius: 999px; padding: 11px 24px; font-size: 15px; font-weight: 600;" style-hover="background: #FF7BA9; color: #000;">Ver el show</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cine" style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.4vw, 32px);">
+        <h2 style="margin: 0; font-size: clamp(48px, 7.4vw, 110px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Cine &amp; música</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">Documentales en cartelera</p>
+      </div>
+      <div style="border: 2px solid #000; border-radius: 28px; box-shadow: 6px 6px 0 #000; background: #77D6A4; padding: clamp(22px, 2.6vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 3vw, 44px); align-items: center;">
+        <button onClick="{{ abrirCine }}" style="cursor: pointer; padding: 0; border: 2px solid #000; border-radius: 20px; background: #FF7BA9; aspect-ratio: 2 / 3; max-width: 320px; width: 100%; display: grid; place-items: center; box-shadow: 6px 6px 0 #000; justify-self: center;" style-hover="background: #FFD84D;">
+          <svg viewBox="0 0 100 100" width="110" height="110" aria-hidden="true"><path d="M56 6L22 56h22l-8 40 36-52H50l6-38z" fill="#000"></path></svg>
+        </button>
+        <div style="min-width: 0;">
+          <span style="border: 2px solid #000; border-radius: 999px; background: #FF7BA9; padding: 7px 17px; font-size: 14px; font-weight: 600;">Documental 2004</span>
+          <h3 style="margin: 18px 0 14px; font-size: clamp(38px, 5.4vw, 80px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Let’s Rock Again</h3>
+          <p style="margin: 0 0 20px; font-size: 17px; font-weight: 400; line-height: 1.55; max-width: 58ch;">Los últimos años de Joe Strummer con The Mescaleros: pegar afiches él mismo, tocar en bares y volver a empezar después de The Clash. Punk, reggae y folk en la misma gira.</p>
+          <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <span style="font-size: 22px; letter-spacing: 2px;">★★★★☆</span>
+            <span style="border: 2px solid #000; border-radius: 999px; background: #fff; padding: 7px 16px; font-size: 13px; font-weight: 600;">Íntimo</span>
+            <span style="border: 2px solid #000; border-radius: 999px; background: #fff; padding: 7px 16px; font-size: 13px; font-weight: 600;">Punk rock</span>
+            <span style="border: 2px solid #000; border-radius: 999px; background: #FFD84D; padding: 7px 16px; font-size: 13px; font-weight: 600;">Imperdible</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="historicos" style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.4vw, 32px);">
+        <h2 style="margin: 0; font-size: clamp(48px, 7.4vw, 110px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Recitales históricos</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">Momentos que cambiaron la historia</p>
+      </div>
+      <div style="border-top: 2px solid #000;">
+        <sc-for list="{{ historicos }}" as="h" hint-placeholder-count="5">
+          <button onClick="{{ h.open }}" style="cursor: pointer; width: 100%; text-align: left; background: #fff; border: 0; border-bottom: 1px solid #000; padding: 18px 8px; display: flex; align-items: center; gap: clamp(14px, 2vw, 26px); flex-wrap: wrap;" style-hover="background: #FFD84D;">
+            <span style="flex: none; width: 66px; height: 66px; border: 2px solid #000; border-radius: 50%; background: {{ h.color }}; display: grid; place-items: center;">
+              <svg viewBox="0 0 100 100" width="34" height="34" aria-hidden="true"><path d="{{ h.d }}" fill="#000"></path></svg>
+            </span>
+            <span style="flex: 1 1 260px; min-width: 0;">
+              <span style="display: block; font-size: clamp(20px, 2vw, 28px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;">{{ h.titulo }}</span>
+              <span style="display: block; font-size: 15px; font-weight: 400; color: #4A4A4A; margin-top: 5px;">{{ h.sub }}</span>
+            </span>
+            <span style="flex: none; border: 2px solid #000; border-radius: 999px; background: {{ h.color }}; padding: 8px 18px; font-size: 14px; font-weight: 600;">{{ h.dato }}</span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 40px);">
+        <h2 style="margin: 0; font-size: clamp(44px, 6.6vw, 100px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Rock en español</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">Noches que no se olvidan</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: clamp(20px, 2.4vw, 32px);">
+        <sc-for list="{{ hitos }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.open }}" style="cursor: pointer; text-align: left; border: 2px solid #000; border-radius: 26px; box-shadow: 6px 6px 0 #000; background: #fff; padding: clamp(20px, 2.4vw, 34px);" style-hover="transform: translate(-2px, -2px); box-shadow: 9px 9px 0 #000;">
+            <div style="font-size: clamp(56px, 8vw, 118px); font-weight: 800; letter-spacing: -0.05em; line-height: 0.85; color: {{ t.color }}; -webkit-text-stroke: 2px #000;">{{ t.anio }}</div>
+            <div style="margin-top: 16px; font-size: clamp(20px, 1.8vw, 26px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;">{{ t.titulo }}</div>
+            <p style="margin: 8px 0 0; font-size: 16px; font-weight: 400; line-height: 1.5; color: #1a1a1a; max-width: 44ch;">{{ t.desc }}</p>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="catalogo" style="padding: clamp(56px, 7vw, 104px) clamp(16px, 4vw, 56px) 0;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.4vw, 28px);">
+        <h2 style="margin: 0; font-size: clamp(48px, 7.4vw, 110px); font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; line-height: 0.9;">Todo el catálogo</h2>
+        <p style="margin: 0 0 8px; font-size: clamp(17px, 1.5vw, 22px); font-weight: 500;">{{ totalTxt }}</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: clamp(24px, 3vw, 34px);">
+        <sc-for list="{{ generos }}" as="g" hint-placeholder-count="7">
+          <button onClick="{{ g.set }}" style="cursor: pointer; border: 2px solid #000; border-radius: 999px; padding: 9px 20px; font-size: 14px; font-weight: 600; box-shadow: 3px 3px 0 #000; background: {{ g.bg }};" style-hover="background: #FFD84D;">{{ g.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: clamp(18px, 2vw, 26px);">
+        <sc-for list="{{ catalogo }}" as="v" hint-placeholder-count="12">
+          <button onClick="{{ v.open }}" style="cursor: pointer; text-align: left; padding: 0; overflow: hidden; border: 2px solid #000; border-radius: 22px; box-shadow: 6px 6px 0 #000; background: #fff;" style-hover="background: {{ v.color }}; transform: translate(-2px, -2px); box-shadow: 9px 9px 0 #000;">
+            <div style="position: relative; aspect-ratio: 16 / 10; background: {{ v.color }}; border-bottom: 2px solid #000; display: grid; place-items: center;">
+              <svg viewBox="0 0 100 100" width="58" height="58" aria-hidden="true"><path d="{{ v.d }}" fill="#000"></path></svg>
+              <span style="position: absolute; left: 10px; top: 10px; width: 40px; height: 40px; border: 2px solid #000; border-radius: 50%; background: #fff; display: grid; place-items: center;">
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 3l15 9-15 9z" fill="#000"></path></svg>
+              </span>
+              <span style="position: absolute; right: 10px; bottom: 10px; border: 2px solid #000; border-radius: 999px; background: #fff; padding: 3px 12px; font-size: 12px; font-weight: 600;">{{ v.anio }}</span>
+            </div>
+            <div style="padding: 15px 17px 18px;">
+              <div style="font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;">{{ v.artista }}</div>
+              <div style="font-size: 14px; font-weight: 400; color: #4A4A4A; margin-top: 6px; line-height: 1.35;">{{ v.show }}</div>
+              <div style="font-size: 13px; font-weight: 500; margin-top: 10px;">{{ v.meta }}</div>
+            </div>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ hayMas }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; justify-content: center; margin-top: clamp(28px, 3vw, 40px);">
+          <button onClick="{{ verMas }}" style="cursor: pointer; border: 2px solid #000; background: #FF7BA9; border-radius: 999px; padding: 15px 34px; font-size: 16px; font-weight: 600; box-shadow: 5px 5px 0 #000;" style-hover="background: #FFD84D;">{{ verMasTxt }}</button>
+        </div>
+      </sc-if>
+      <div style="height: clamp(56px, 7vw, 104px);"></div>
+    </section>
+
+  </main>
+  </sc-if>
+
+  <footer style="background: #000; color: #fff; padding: clamp(32px, 4vw, 56px) clamp(16px, 4vw, 56px); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+      <span style="font-size: clamp(26px, 3vw, 40px); font-weight: 800; letter-spacing: -0.04em; line-height: 1;">PLAYCONCERT</span>
+      <span style="border: 2px solid #fff; border-radius: 999px; background: #FF7BA9; color: #000; padding: 6px 16px; font-size: 13px; font-weight: 600;">Rediseño 2026</span>
+    </div>
+    <nav style="display: flex; align-items: center; gap: 22px; font-size: 16px; font-weight: 500;">
+      <a href="#inicio" style="color: #fff;" style-hover="color: #FFD84D;">Contacto</a>
+      <a href="#inicio" style="color: #fff;" style-hover="color: #FFD84D;">Sobre nosotros</a>
+      <a href="#inicio" style="color: #fff;" style-hover="color: #FFD84D;">Playtown</a>
+    </nav>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const FORMAS = {
+  bolt: "M56 6L22 56h22l-8 40 36-52H50l6-38z",
+  star: "M50 4l12 30 32 2-25 21 8 31-27-18-27 18 8-31-25-21 32-2z",
+  disc: "M50 8a42 42 0 100 84 42 42 0 100-84zm0 32a10 10 0 110 20 10 10 0 110-20z",
+  pick: "M50 10c22 0 34 12 34 30 0 22-20 42-34 50-14-8-34-28-34-50 0-18 12-30 34-30z",
+  flower: "M46 4h8v34l24-24 6 6-24 24h34v8H60l24 24-6 6-24-24v34h-8V58L22 82l-6-6 24-24H6v-8h34L16 20l6-6 24 24z"
+};
+const FKEYS = ["bolt", "star", "disc", "pick", "flower"];
+const ESTADOS = {
+  "Legendario": "#FFD84D",
+  "En actividad": "#77D6A4",
+  "Ícono global": "#FF7BA9",
+  "Culto": "#B79CED"
+};
+const LEYENDAS = [
+  { n: "Queen", c: "#B79CED", e: "Legendario" },
+  { n: "The Rolling Stones", c: "#77D6A4", e: "En actividad" },
+  { n: "David Bowie", c: "#FF7BA9", e: "Ícono global" },
+  { n: "Jimi Hendrix", c: "#8FCFE8", e: "Legendario" },
+  { n: "The Who", c: "#FFD84D", e: "Ícono global" },
+  { n: "Bob Marley", c: "#B79CED", e: "Legendario" }
+];
+const HISTORICOS = ["The Beatles – En vivo en el Shea Stadium", "David Bowie – Starman", "Queen – We Will Rock You", "Bob Marley – Leyenda en vivo", "Farm Aid – 20th Anniversary"];
+const HITOS = [
+  { t: "Soda Stereo – El Último Concierto", titulo: "Gracias totales en River", desc: "El cierre de Sueño Stereo ante un Monumental completo: la despedida más recordada del rock en español." },
+  { t: "Carlos Santana – Supernatural Live", titulo: "Santana en el Auditorio Nacional", desc: "La gira de Supernatural pasó por México con la formación más celebrada de la banda." },
+  { t: "The Police – Certifiable: Live in Buenos Aires", titulo: "The Police vuelve a River", desc: "La gira de reunión eligió Buenos Aires para su registro oficial en vivo." },
+  { t: "Los Fabulosos Cadillacs – En Vivo en México", titulo: "Los Cadillacs en el Palacio", desc: "Ska, rock y reggae con la potencia del regreso de la banda al Palacio de los Deportes." }
+];
+const GENEROS = ["Todos", "Rock", "Pop", "Jazz", "Soul", "Folk", "Rap", "Reggae", "Brasilero", "Italiano"];
+
+class Component extends DCLogic {
+  state = { vista: "home", id: null, filtro: "Todos", limite: 12, data: null };
+  videoRef = React.createRef();
+
+  componentDidMount() {
+    import("./catalogo.js").then(m => this.setState({ data: m })).catch(e => console.error("catálogo", e));
+  }
+
+  componentDidUpdate(pp, ps) {
+    if (ps.id !== this.state.id || ps.vista !== this.state.vista || ps.data !== this.state.data) this.cargarVideo();
+    if (ps.vista !== this.state.vista) window.scrollTo(0, 0);
+  }
+
+  cargarVideo() {
+    const el = this.videoEl;
+    const v = this.actualV();
+    if (!el || !v || v.pendiente || !v.src) return;
+    if (el.dataset.cargado === v.src) return;
+    el.innerHTML = "";
+    const s1 = document.createElement("source");
+    s1.src = v.src; s1.type = "video/mp4";
+    el.appendChild(s1);
+    if (v.srcSd && v.srcSd !== v.src) {
+      const s2 = document.createElement("source");
+      s2.src = v.srcSd; s2.type = "video/mp4";
+      el.appendChild(s2);
+    }
+    el.dataset.cargado = v.src;
+    el.load();
+  }
+
+  actualV() {
+    const vs = (this.state.data && this.state.data.videos) || [];
+    return vs.find(v => v.id === this.state.id) || null;
+  }
+
+  abrir(id) {
+    return () => this.setState({ vista: "ficha", id: id });
+  }
+
+  vid(pred) {
+    const vs = (this.state.data && this.state.data.videos) || [];
+    return vs.find(pred) || null;
+  }
+
+  card(v) {
+    if (!v) return null;
+    const meta = [v.lugar, v.loc].filter(Boolean)[0] || v.genero;
+    return {
+      id: v.id, artista: v.artista, show: v.show || v.titulo, anio: v.anio || "—",
+      color: v.color, d: FORMAS[v.forma] || FORMAS.disc, meta: meta,
+      open: this.abrir(v.id)
+    };
+  }
+
+  renderVals() {
+    const d = this.state.data;
+    const videos = (d && d.videos) || [];
+    const bio = n => (d && d.bioDe(n)) || null;
+    const st = this.state;
+
+    const hero = this.vid(v => v.titulo.indexOf("Queen – We Will Rock You") === 0);
+    const aviso = this.vid(v => v.titulo.indexOf("The Police") === 0);
+    const destacado = this.vid(v => v.titulo.indexOf("Soda Stereo") === 0);
+    const cine = this.vid(v => v.titulo.indexOf("Joe Strummer") === 0);
+
+    const actualV = videos.find(v => v.id === st.id) || null;
+    let actual = null;
+    if (actualV) {
+      const b = bio(actualV.artista);
+      const ficha = [
+        { k: "Año", v: actualV.anio || "Sin dato" },
+        { k: "Género", v: actualV.genero || "Varios" },
+        { k: "Locación", v: actualV.loc || "Varios lugares" },
+        { k: "Lugar", v: actualV.lugar || "Sin dato" },
+        { k: "En actividad", v: (b && b.actividad) || "Sin dato" }
+      ].filter(f => f.v !== "Sin dato" || f.k === "Lugar");
+      actual = {
+        artista: actualV.artista, show: actualV.show || actualV.titulo,
+        anio: actualV.anio || "Sin fecha", color: actualV.color,
+        calidad: actualV.pendiente ? "Pendiente" : (actualV.max >= 1080 ? "1080p" : "SD"),
+        catsTxt: (actualV.cats && actualV.cats[0]) || "Recital",
+        src: actualV.src, srcSd: actualV.srcSd || actualV.src,
+        bio: (b && b.bio) || (actualV.genero ? "Registro en vivo de " + actualV.artista + ". " + actualV.genero + "." : "Registro en vivo de " + actualV.artista + "."),
+        ficha: ficha
+      };
+    }
+
+    const relacionados = actualV
+      ? videos.filter(v => v.id !== actualV.id && v.cats.some(c => actualV.cats.indexOf(c) >= 0)).slice(0, 4).map(v => this.card(v))
+      : [];
+
+    const leyendas = LEYENDAS.map((l, i) => {
+      const propios = videos.filter(v => v.artista.toLowerCase().indexOf(l.n.toLowerCase()) >= 0);
+      const v0 = propios[0];
+      return {
+        nombre: l.n, color: l.c, d: FORMAS[FKEYS[i % 5]],
+        genero: (v0 && v0.genero) || "Rock",
+        estado: l.e, estadoColor: ESTADOS[l.e],
+        shows: propios.length === 1 ? "1 show" : propios.length + " shows",
+        open: v0 ? this.abrir(v0.id) : () => {}
+      };
+    });
+
+    const historicos = HISTORICOS.map((t, i) => {
+      const v = this.vid(x => x.titulo === t);
+      if (!v) return { titulo: t, sub: "", dato: "", color: "#FFD84D", d: FORMAS.disc, open: () => {} };
+      return {
+        titulo: v.artista + " — " + (v.show || v.titulo),
+        sub: [v.anio, v.lugar, v.loc].filter(Boolean).join(", "),
+        dato: v.lugar || v.loc || v.genero,
+        color: ["#FF7BA9", "#8FCFE8", "#FFD84D", "#77D6A4", "#B79CED"][i % 5],
+        d: FORMAS[FKEYS[i % 5]],
+        open: this.abrir(v.id)
+      };
+    });
+
+    const hitos = HITOS.map((h, i) => {
+      const v = this.vid(x => x.titulo === h.t);
+      return {
+        anio: (v && v.anio) || "—", titulo: h.titulo, desc: h.desc,
+        color: ["#FF7BA9", "#77D6A4", "#8FCFE8", "#B79CED"][i % 4],
+        open: v ? this.abrir(v.id) : () => {}
+      };
+    });
+
+    const filtrados = st.filtro === "Todos" ? videos : videos.filter(v => v.cats.indexOf(st.filtro) >= 0 || v.genero.toLowerCase().indexOf(st.filtro.toLowerCase()) >= 0);
+    const catalogo = filtrados.slice(0, st.limite).map(v => this.card(v));
+    const generos = GENEROS.map(g => ({
+      label: g, bg: g === st.filtro ? "#8FCFE8" : "#fff",
+      set: () => this.setState({ filtro: g, limite: 12 })
+    }));
+
+    return {
+      esHome: st.vista === "home", esFicha: st.vista === "ficha",
+      tieneVideo: !!(actualV && !actualV.pendiente && actualV.src),
+      videoPendiente: !!(actualV && actualV.pendiente),
+      irHome: () => this.setState({ vista: "home" }),
+      abrirHero: hero ? this.abrir(hero.id) : () => {},
+      abrirAviso: aviso ? this.abrir(aviso.id) : () => {},
+      abrirDestacado: destacado ? this.abrir(destacado.id) : () => {},
+      abrirCine: cine ? this.abrir(cine.id) : () => {},
+      leyendas: leyendas, historicos: historicos, hitos: hitos,
+      generos: generos, catalogo: catalogo,
+      totalTxt: videos.length ? videos.length + " recitales disponibles" : "Cargando catálogo",
+      hayMas: filtrados.length > st.limite,
+      verMasTxt: "Ver más recitales (" + Math.max(filtrados.length - st.limite, 0) + ")",
+      verMas: () => this.setState({ limite: st.limite + 12 }),
+      relacionados: relacionados,
+      actual: actual || { artista: "", show: "", anio: "", color: "#FFD84D", calidad: "", catsTxt: "", src: "", srcSd: "", bio: "", ficha: [] },
+      videoRef: el => { this.videoEl = el; if (el) this.cargarVideo(); }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

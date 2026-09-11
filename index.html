@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PlayConcert — Tus bandas favoritas a un click</title>
+<meta name="description" content="Recitales completos de las bandas que hicieron historia. Catálogo de shows en vivo, fichas de banda y cine sobre música.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-pagina="home">
+
+<header class="cabecera">
+  <a class="marca" href="index.html">
+    <img class="marca__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+    <img class="marca__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+  </a>
+  <nav class="menu" aria-label="Principal">
+    <a href="#inicio" aria-current="page">Inicio</a>
+    <a href="#leyendas">Leyendas</a>
+    <a href="#historicos">Históricos</a>
+    <a href="#cine">Cine</a>
+    <a href="#catalogo">Catálogo</a>
+  </nav>
+</header>
+
+<main id="inicio">
+
+  <!-- Hero: el recital destacado de la semana. Rota solo (semana ISO). -->
+  <section class="hero" id="hero" aria-label="Recital destacado de la semana"></section>
+
+  <div class="marquesina" id="marquesina" aria-hidden="true"></div>
+
+  <!-- Alerta destacada: bandas que vinieron o vienen al país. -->
+  <section class="seccion" style="padding-top:clamp(28px,3.4vw,52px)" aria-label="Novedad destacada">
+    <div id="alerta"></div>
+  </section>
+
+  <section class="seccion" id="leyendas">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Leyendas del rock</h2>
+      <p class="seccion-bajada">Los más reconocidos, primero</p>
+    </div>
+    <div class="grilla grilla--bandas" id="leyendas-grilla"></div>
+  </section>
+
+  <!-- Artista destacado: uno distinto por semana, de todo el catálogo. -->
+  <section class="seccion">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Artista destacado</h2>
+      <p class="seccion-bajada">Cambia todas las semanas</p>
+    </div>
+    <div id="destacado"></div>
+  </section>
+
+  <section class="seccion" id="cine">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Cine &amp; música</h2>
+      <p class="seccion-bajada">Documentales en cartelera</p>
+    </div>
+    <div id="cine-caja"></div>
+  </section>
+
+  <section class="seccion" id="historicos">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Recitales históricos</h2>
+      <p class="seccion-bajada">Momentos que cambiaron la historia</p>
+    </div>
+    <div class="lista" id="historicos-lista"></div>
+  </section>
+
+  <section class="seccion">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Noches latinoamericanas</h2>
+      <p class="seccion-bajada">Noches que no se olvidan</p>
+    </div>
+    <div class="grilla grilla--bandas" id="latino-grilla"></div>
+  </section>
+
+  <section class="seccion" id="catalogo">
+    <div class="seccion-cabecera">
+      <h2 class="titulo-l">Todo el catálogo</h2>
+      <p class="seccion-bajada" id="catalogo-total">Cargando catálogo</p>
+    </div>
+    <div class="filtros" id="catalogo-filtros" role="group" aria-label="Filtrar por género"></div>
+    <div id="catalogo-grilla" class="grilla grilla--catalogo"></div>
+    <div class="vacio oculto" id="catalogo-vacio">
+      <img class="vacio__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+      <p>Todavía no hay recitales de ese género en el catálogo.</p>
+    </div>
+    <div class="centrar" id="catalogo-mas"></div>
+  </section>
+
+  <div class="espacio"></div>
+</main>
+
+<footer class="pie">
+  <img class="pie__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+  <img class="pie__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

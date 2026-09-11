@@ -1,0 +1,107 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-08T20:54:18.830Z",
+        "reason": "Claude: el detector solo ve los px fijos de styles.css y no evalua los clamp() que cargan la jerarquia. Medido en el navegador a 1440px: 100.8 / 80.6 / 43.2 / 28.8 / 21.6 / 17 / 15 / 13 px (7.8x de spread). Los pasos chicos ya se consolidaron de 13/14/15/16/17/18 a 13/15/17/20 en esta misma pasada."
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-08T20:54:18.876Z",
+        "reason": "Claude: la marquesina viene del prototipo aprobado que se entrego para maquetar (@keyframes pc-marquee en design_handoff_playconcert/prototipo/PlayConcert.dc.html), no es una decision nueva. Respeta prefers-reduced-motion y es decorativa (aria-hidden). Pendiente de que Mati decida si la saca."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "recital.html"
+        ],
+        "createdAt": "2026-09-08T20:54:18.923Z",
+        "reason": "Claude: el detector solo ve los px fijos de styles.css y no evalua los clamp() que cargan la jerarquia. Medido en el navegador a 1440px: 100.8 / 80.6 / 43.2 / 28.8 / 21.6 / 17 / 15 / 13 px (7.8x de spread). Los pasos chicos ya se consolidaron de 13/14/15/16/17/18 a 13/15/17/20 en esta misma pasada."
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "recital.html"
+        ],
+        "createdAt": "2026-09-08T20:54:18.969Z",
+        "reason": "Claude: la marquesina viene del prototipo aprobado que se entrego para maquetar (@keyframes pc-marquee en design_handoff_playconcert/prototipo/PlayConcert.dc.html), no es una decision nueva. Respeta prefers-reduced-motion y es decorativa (aria-hidden). Pendiente de que Mati decida si la saca."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "banda.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.015Z",
+        "reason": "Claude: el detector solo ve los px fijos de styles.css y no evalua los clamp() que cargan la jerarquia. Medido en el navegador a 1440px: 100.8 / 80.6 / 43.2 / 28.8 / 21.6 / 17 / 15 / 13 px (7.8x de spread). Los pasos chicos ya se consolidaron de 13/14/15/16/17/18 a 13/15/17/20 en esta misma pasada."
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "banda.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.060Z",
+        "reason": "Claude: la marquesina viene del prototipo aprobado que se entrego para maquetar (@keyframes pc-marquee en design_handoff_playconcert/prototipo/PlayConcert.dc.html), no es una decision nueva. Respeta prefers-reduced-motion y es decorativa (aria-hidden). Pendiente de que Mati decida si la saca."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "nota.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.106Z",
+        "reason": "Claude: el detector solo ve los px fijos de styles.css y no evalua los clamp() que cargan la jerarquia. Medido en el navegador a 1440px: 100.8 / 80.6 / 43.2 / 28.8 / 21.6 / 17 / 15 / 13 px (7.8x de spread). Los pasos chicos ya se consolidaron de 13/14/15/16/17/18 a 13/15/17/20 en esta misma pasada."
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "nota.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.152Z",
+        "reason": "Claude: la marquesina viene del prototipo aprobado que se entrego para maquetar (@keyframes pc-marquee en design_handoff_playconcert/prototipo/PlayConcert.dc.html), no es una decision nueva. Respeta prefers-reduced-motion y es decorativa (aria-hidden). Pendiente de que Mati decida si la saca."
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "pelicula.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.198Z",
+        "reason": "Claude: el detector solo ve los px fijos de styles.css y no evalua los clamp() que cargan la jerarquia. Medido en el navegador a 1440px: 100.8 / 80.6 / 43.2 / 28.8 / 21.6 / 17 / 15 / 13 px (7.8x de spread). Los pasos chicos ya se consolidaron de 13/14/15/16/17/18 a 13/15/17/20 en esta misma pasada."
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "pelicula.html"
+        ],
+        "createdAt": "2026-09-08T20:54:19.244Z",
+        "reason": "Claude: la marquesina viene del prototipo aprobado que se entrego para maquetar (@keyframes pc-marquee en design_handoff_playconcert/prototipo/PlayConcert.dc.html), no es una decision nueva. Respeta prefers-reduced-motion y es decorativa (aria-hidden). Pendiente de que Mati decida si la saca."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-09-08T21:07:00.082Z",
+        "reason": "Claude: falso positivo — el detector no resuelve la clase desde el stylesheet externo y asume padding cero en el wrapper. Medido en el navegador: .vacio tiene padding 48px y los hijos quedan a 50px de cada borde."
+      }
+    ]
+  }
+}
