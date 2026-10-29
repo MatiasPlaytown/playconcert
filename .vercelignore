@@ -1,5 +1,5 @@
 # Fuentes y handoff: no son parte del sitio servido.
-# Las 5 páginas sólo usan favicon.svg, styles.css, app.js y assets/.
+# Las 8 páginas sólo usan favicon.svg, styles.css, app.js y assets/.
 
 # Export de WordPress (fuente de datos.js, con mails internos adentro)
 uploads/

@@ -4,12 +4,15 @@
  * Multipágina estática, sin build ni framework: cada HTML declara qué pantalla
  * es en `<body data-pagina="...">` y acá se elige el `init` correspondiente.
  *
- *   index.html    → home      (hero semanal, alerta, leyendas, artista de la
- *                              semana, cine, históricos, latinoamérica, catálogo)
- *   recital.html  → recital   (?slug= — el player y la ficha del recital)
- *   banda.html    → banda     (?slug= — la ficha de la banda, como en WordPress)
- *   nota.html     → nota      (?slug= — nota de "¡Vino a Argentina!")
- *   pelicula.html → pelicula  (?slug= — ficha de Cine & música)
+ *   index.html     → home      (hero semanal, alerta, leyendas, artista de la
+ *                               semana, cine, históricos, latinoamérica, catálogo)
+ *   artistas.html  → artistas  (todas las bandas, A→Z / Z→A)
+ *   recitales.html → recitales (todos los shows, por nombre o por año)
+ *   generos.html   → generos   (?genero= — los shows de un género)
+ *   recital.html   → recital   (?slug= — el player y la ficha del recital)
+ *   banda.html     → banda     (?slug= — la ficha de la banda, como en WordPress)
+ *   nota.html      → nota      (?slug= — nota de "¡Vino a Argentina!")
+ *   pelicula.html  → pelicula  (?slug= — ficha de Cine & música)
  *
  * Datos: `datos.js` (generado del export de WordPress) + `editorial.js` (lo que
  * se cambia a mano cada semana). Cuando entre la API de WordPress, sólo cambia
@@ -362,6 +365,19 @@ const GENEROS = [
 
 const PASO = 12;
 
+/** Minúsculas y sin tildes, para que "Electronica" encuentre "Electrónica". */
+const plano = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+/**
+ * Un recital es de un género si lo tiene como categoría en WordPress o si el
+ * campo libre "Género" lo nombra ("Rock, Reggae Rock" también es Reggae). La
+ * usan el catálogo de la home y la pantalla de géneros, así cuentan lo mismo.
+ */
+const coincideGenero = (r, g) =>
+  g === "Todos" ||
+  r.cats.some((c) => plano(c) === plano(g)) ||
+  plano(r.genero).includes(plano(g));
+
 function initCatalogo() {
   const grilla = $("#catalogo-grilla");
   const filtros = $("#catalogo-filtros");
@@ -369,11 +385,7 @@ function initCatalogo() {
   if (!grilla) return;
 
   const estado = { genero: "Todos", visibles: PASO };
-
-  const coincide = (r, g) =>
-    g === "Todos" ||
-    r.cats.some((c) => c.toLowerCase() === g.toLowerCase()) ||
-    r.genero.toLowerCase().includes(g.toLowerCase());
+  const coincide = coincideGenero;
 
   filtros.innerHTML = GENEROS.map(
     (g) => `<button class="filtro" type="button" data-genero="${esc(g)}"
@@ -418,6 +430,152 @@ function initCatalogo() {
   masCaja.addEventListener("click", (e) => {
     if (!e.target.closest("#ver-mas")) return;
     estado.visibles += PASO;
+    pintar();
+  });
+
+  pintar();
+}
+
+/* ============================================ LISTADOS (artistas, recitales) */
+
+const alfabetico = (a, b) => a.localeCompare(b, "es", { sensitivity: "base" });
+const nombreRecital = (r) => `${r.artista} ${r.show}`;
+
+/**
+ * Botonera de orden que comparten Artistas y Recitales. El orden elegido queda
+ * en `?orden=` (con replaceState), así un link o un recargar lo respetan.
+ * `ordenes` es { clave: [rótulo, comparador] }; la primera es la de entrada.
+ */
+function listadoOrdenable({ items, ordenes, botonera, grilla, total, tarjeta, contar }) {
+  if (!grilla) return;
+  const claves = Object.keys(ordenes);
+  let orden = claves.includes(param("orden")) ? param("orden") : claves[0];
+
+  botonera.insertAdjacentHTML(
+    "beforeend",
+    claves
+      .map(
+        (k) => `<button class="filtro" type="button" data-orden="${k}"
+                 aria-pressed="${k === orden}">${esc(ordenes[k][0])}</button>`
+      )
+      .join("")
+  );
+  if (total) total.textContent = contar(items.length);
+
+  function pintar() {
+    grilla.innerHTML = [...items].sort(ordenes[orden][1]).map(tarjeta).join("");
+    for (const b of botonera.querySelectorAll("[data-orden]")) {
+      b.setAttribute("aria-pressed", String(b.dataset.orden === orden));
+    }
+  }
+
+  botonera.addEventListener("click", (e) => {
+    const boton = e.target.closest("[data-orden]");
+    if (!boton || boton.dataset.orden === orden) return;
+    orden = boton.dataset.orden;
+    const url = new URL(location.href);
+    url.searchParams.set("orden", orden);
+    history.replaceState(null, "", url);
+    pintar();
+  });
+
+  pintar();
+}
+
+function initArtistas() {
+  listadoOrdenable({
+    items: bandas.filter((b) => b.recitales.length),
+    ordenes: {
+      "az": ["A → Z", (a, b) => alfabetico(a.nombre, b.nombre)],
+      "za": ["Z → A", (a, b) => alfabetico(b.nombre, a.nombre)],
+    },
+    botonera: $("#artistas-orden"),
+    grilla: $("#artistas-grilla"),
+    total: $("#artistas-total"),
+    tarjeta: (b) => tarjetaBanda(b),
+    contar: (n) => (n === 1 ? "1 artista" : `${n} artistas`),
+  });
+}
+
+/** Por año, y a igual año por nombre. Los que no tienen año van siempre al final. */
+const porAnio = (sentido) => (a, b) => {
+  if (!a.anio || !b.anio) return !a.anio - !b.anio;
+  return sentido * (Number(a.anio) - Number(b.anio)) || alfabetico(nombreRecital(a), nombreRecital(b));
+};
+
+function initRecitales() {
+  listadoOrdenable({
+    items: recitales,
+    ordenes: {
+      "az": ["A → Z", (a, b) => alfabetico(nombreRecital(a), nombreRecital(b))],
+      "za": ["Z → A", (a, b) => alfabetico(nombreRecital(b), nombreRecital(a))],
+      "anio-asc": ["Más antiguos", porAnio(1)],
+      "anio-desc": ["Más recientes", porAnio(-1)],
+    },
+    botonera: $("#recitales-orden"),
+    grilla: $("#recitales-grilla"),
+    total: $("#recitales-total"),
+    tarjeta: tarjetaRecital,
+    contar: (n) => (n === 1 ? "1 recital disponible" : `${n} recitales disponibles`),
+  });
+}
+
+/* ================================================================ GÉNEROS */
+
+/** Categorías del CMS que no son música: lugares y formatos. */
+const NO_SON_GENEROS = ["Inglaterra", "Grecia", "Varios", "Compilado Videoclips"];
+
+/**
+ * Los géneros salen del catálogo, no de una lista escrita a mano: son las
+ * categorías musicales que los recitales tienen cargadas en WordPress, de la
+ * más poblada a la menos. Si mañana se carga un recital de Tango, aparece solo.
+ */
+function generosDelCatalogo() {
+  const nombres = new Set(recitales.flatMap((r) => r.cats).filter((c) => !NO_SON_GENEROS.includes(c)));
+  return [...nombres]
+    .map((g) => ({ nombre: g, recitales: recitales.filter((r) => coincideGenero(r, g)) }))
+    .sort((a, b) => b.recitales.length - a.recitales.length || alfabetico(a.nombre, b.nombre));
+}
+
+function initGeneros() {
+  const lista = $("#generos-lista");
+  const grilla = $("#generos-grilla");
+  if (!grilla) return;
+
+  const generos = generosDelCatalogo();
+  if (!generos.length) return noEncontrado("Todavía no hay géneros cargados.");
+  const pedido = generos.find((g) => plano(g.nombre) === plano(param("genero")));
+  let actual = pedido || generos[0];
+
+  lista.innerHTML = generos
+    .map(
+      (g) => `<button class="filtro" type="button" data-genero="${esc(g.nombre)}">
+        ${esc(g.nombre)} <span class="filtro__cuenta">${g.recitales.length}</span>
+      </button>`
+    )
+    .join("");
+
+  function pintar() {
+    const n = actual.recitales.length;
+    $("#genero-titulo").textContent = actual.nombre;
+    $("#genero-total").textContent = n === 1 ? "1 recital" : `${n} recitales`;
+    grilla.innerHTML = [...actual.recitales]
+      .sort((a, b) => alfabetico(nombreRecital(a), nombreRecital(b)))
+      .map(tarjetaRecital)
+      .join("");
+    for (const b of lista.children) {
+      b.setAttribute("aria-pressed", String(b.dataset.genero === actual.nombre));
+    }
+    document.title = `${actual.nombre} · Géneros · PlayConcert`;
+  }
+
+  lista.addEventListener("click", (e) => {
+    const boton = e.target.closest("[data-genero]");
+    if (!boton) return;
+    actual = generos.find((g) => g.nombre === boton.dataset.genero);
+    const url = new URL(location.href);
+    url.searchParams.set("genero", actual.nombre);
+    history.replaceState(null, "", url);
     pintar();
   });
 
@@ -718,6 +876,9 @@ function noEncontrado(mensaje) {
 
 const PANTALLAS = {
   home: initHome,
+  artistas: initArtistas,
+  recitales: initRecitales,
+  generos: initGeneros,
   recital: initRecital,
   banda: initBanda,
   nota: initNota,

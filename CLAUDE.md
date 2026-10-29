@@ -39,6 +39,9 @@ También está como configuración `playconcert` en `../../.claude/launch.json`.
 | Archivo | Rol |
 |---|---|
 | `index.html` | Home: hero semanal, marquesina, alerta destacada, leyendas, artista de la semana, cine, históricos, latinoamérica y todo el catálogo con filtros |
+| `artistas.html` | Todas las bandas, ordenables A→Z / Z→A (`?orden=az\|za`) |
+| `recitales.html` | Todos los recitales, por nombre o por año (`?orden=az\|za\|anio-asc\|anio-desc`) |
+| `generos.html` | `?genero=` — elegís un género y lista sus recitales |
 | `recital.html` | `?slug=` — el player del recital + ficha, reseñas de prensa y recomendados |
 | `banda.html` | `?slug=` — ficha de la banda tal como está en WordPress: foto, años de actividad, miembros, biografía y sus shows |
 | `nota.html` | `?slug=` — nota de "¡Vino a Argentina!" |
@@ -46,7 +49,7 @@ También está como configuración `playconcert` en `../../.claude/launch.json`.
 | `app.js` | TODO el JS: datos, rotación semanal, tarjetas y el `init` de cada pantalla |
 | `datos.js` | **Generado.** 66 recitales + 63 bandas del export de WordPress |
 | `editorial.js` | Lo que se cambia a mano: hero semanal, curaduría de secciones, alerta y cine |
-| `styles.css` | TODO el CSS: tokens, componentes y las cinco pantallas |
+| `styles.css` | TODO el CSS: tokens, componentes y las ocho pantallas |
 | `assets/marca/` | Isotipo (`iso.png`) y wordmark (`tipo.png`), copiados de `1x/` |
 | `favicon.svg` | Play rosa sobre borde negro |
 | `tools/generar-datos.mjs` | WXR → `datos.js` (migración one-shot, ver su cabecera) |
@@ -97,6 +100,24 @@ hereda la foto de su banda, y el player la usa como tapa antes del play.
 Los dos compilados "Live from Abbey Road" no tienen post de banda: van con la
 foto genérica de concierto del sitio (`varios.jpg`). Son los únicos.
 
+## Navegación
+
+El header es el mismo en las ocho páginas y lleva a cuatro secciones: **Inicio**
+(la home), **Artistas**, **Recitales** y **Géneros**. Está copiado en cada HTML
+(no hay build), así que un cambio en el menú se hace en todos. La ficha de
+banda marca "Artistas" como activa y el player marca "Recitales"; la nota y la
+película no marcan ninguna.
+
+- **Artistas** y **Recitales** comparten `listadoOrdenable()` en `app.js`. El
+  orden elegido queda en `?orden=`. Al ordenar por año, el recital sin año
+  (Stevie Wonder) va siempre al final.
+- **Géneros** no tiene una lista escrita a mano: sale de las categorías de los
+  recitales en WordPress, sacando las que no son música (`NO_SON_GENEROS`:
+  Inglaterra, Grecia, Varios, Compilado Videoclips). Un recital entra en un
+  género si tiene esa categoría o si su campo "Género" lo nombra — la misma
+  regla (`coincideGenero()`) que usa el filtro del catálogo de la home, así los
+  dos cuentan lo mismo.
+
 ## Rotación semanal
 
 `semanaISO()` en `app.js` devuelve el número de semana ISO y con eso se elige:
@@ -142,8 +163,9 @@ node tools/generar-datos.mjs && node tools/descargar-imagenes.mjs
 
 ## Diferencias contra el prototipo
 
-El diseño se respetó salvo en cuatro puntos, todos por la regla de las imágenes,
-por el contenido real o por cómo entra en una pantalla de teléfono:
+El diseño se respetó salvo en cinco puntos, todos por la regla de las imágenes,
+por el contenido real, por cómo entra en una pantalla de teléfono o porque se
+pidió una navegación por secciones en vez de una landing:
 
 1. **Los íconos SVG se fueron.** Donde el prototipo ponía un rayo, una estrella
    o un disco sobre un color plano, ahora va la foto de la banda.
@@ -154,9 +176,13 @@ por el contenido real o por cómo entra en una pantalla de teléfono:
    video 16:9 dejaba dos franjas negras enormes, así que va una tapa propia con
    la foto a sangre y el botón de play, que se saca al arrancar. El video
    después se ve con su relación de aspecto real, sin recortar.
-4. **En mobile la navegación es un `<select>`.** Los cinco links piden 372px y
-   a 375px de viewport hay 343, así que se cortaban. Abajo de 768px se cambian
-   por un selector que abre el picker nativo del sistema; de 768px para arriba
+4. **La navegación lleva a páginas, no a anclas de la home.** El prototipo
+   era una landing (Inicio, Leyendas, Históricos, Cine, Catálogo); ahora el
+   menú es Inicio, Artistas, Recitales y Géneros (ver "Navegación"). La home
+   no cambió.
+5. **En mobile la navegación es un `<select>`.** Abajo de 768px los links no
+   entran al lado de la marca, así que se cambian por un selector que abre el
+   picker nativo del sistema y muestra la sección actual; de 768px para arriba
    los links siguen igual. Como el header pasa a medir dos filas, el alto real
    se publica en `--alto-cabecera` (`ajustarAnclas()`) y `scroll-padding-top`
    lo usa, para que el salto a un ancla no deje la sección tapada.

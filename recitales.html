@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Recitales · PlayConcert</title>
+<meta name="description" content="Todos los recitales completos de PlayConcert, ordenables por nombre y por año.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,400;0,500;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-pagina="recitales">
+
+<header class="cabecera">
+  <a class="marca" href="index.html">
+    <img class="marca__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+    <img class="marca__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+  </a>
+  <nav class="menu" aria-label="Principal">
+    <a href="index.html">Inicio</a>
+    <a href="artistas.html">Artistas</a>
+    <a href="recitales.html" aria-current="page">Recitales</a>
+    <a href="generos.html">Géneros</a>
+  </nav>
+  <div class="menu-movil">
+    <label class="solo-lectores" for="ir-a">Ir a una sección</label>
+    <select id="ir-a">
+      <option value="" disabled>Secciones</option>
+      <option value="index.html">Inicio</option>
+      <option value="artistas.html">Artistas</option>
+      <option value="recitales.html" selected>Recitales</option>
+      <option value="generos.html">Géneros</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="interna">
+    <div class="seccion-cabecera">
+      <h1 class="titulo-l">Recitales</h1>
+      <p class="seccion-bajada" id="recitales-total">Cargando recitales</p>
+    </div>
+    <div class="filtros" id="recitales-orden" role="group" aria-label="Ordenar recitales">
+      <span class="filtros__rotulo">Ordenar</span>
+    </div>
+    <div class="grilla grilla--catalogo" id="recitales-grilla"></div>
+    <div class="espacio"></div>
+  </div>
+</main>
+
+<footer class="pie">
+  <img class="pie__iso" src="assets/marca/iso.png" alt="" width="961" height="273">
+  <img class="pie__tipo" src="assets/marca/tipo.png" alt="PlayConcert" width="961" height="57">
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

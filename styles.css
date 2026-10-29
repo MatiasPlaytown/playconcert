@@ -365,9 +365,9 @@ img {
   border-bottom-color: var(--rosa);
 }
 
-/* Menú mobile. Los cinco links piden 372px y a 375px de viewport hay 343, así
-   que abajo de 768px se cambian por un <select>: abre el picker nativo del
-   sistema, que en el teléfono es más cómodo que una lista que se corta. */
+/* Menú mobile. Abajo de 768px los links no entran al lado de la marca, así
+   que se cambian por un <select>: abre el picker nativo del sistema, que en el
+   teléfono es más cómodo que una lista que se corta. */
 .menu-movil {
   display: none;
   position: relative;
@@ -964,6 +964,22 @@ button:hover > .play--chico {
   background: var(--celeste);
   transform: translate(1px, 1px);
   box-shadow: 2px 2px 0 var(--tinta);
+}
+
+/* "Ordenar" delante de la botonera de Artistas y Recitales. */
+.filtros__rotulo {
+  align-self: center;
+  margin-right: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gris);
+}
+
+/* Cuántos recitales tiene cada género, dentro del botón. */
+.filtro__cuenta {
+  margin-left: 4px;
+  font-weight: 500;
+  opacity: 0.6;
 }
 
 .centrar {
